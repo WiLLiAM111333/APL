@@ -2,4 +2,4 @@
 
 # Uppgifter
 
-* [9](../arduino_uppgift_9/arduino_uppgift_9.ino)
+* [9](/arduino_uppgift_9/arduino_uppgift_9.ino)
