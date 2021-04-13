@@ -17,22 +17,13 @@ void setup() {
 }
 
 void loop() {
-  lcd.setCursor(0, 0);
-  
-  for(int i = 0; i < 11; i++) {
-    lcd.print(message[i]);
-    delay(500);  
+  for(int i = 0; i < 13; i++) {
+    lcd.scrollDisplayLeft();
+    delay(150);
   }
 
-  lcd.setCursor(16, 1);
-  lcd.autoscroll();
-
-  for(int i = 0; i < 11; i++) {
-    lcd.print(message[i]);
-    delay(500);
+  for(int i = 0; i < 29; i++) {
+    lcd.scrollDisplayLeft();
+    delay(150);
   }
-
-  lcd.noAutoscroll();
-
-  lcd.clear();
 }
