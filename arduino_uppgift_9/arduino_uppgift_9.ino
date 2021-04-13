@@ -33,7 +33,7 @@ void loop() {
   displayMinutes();
   displayHours();
 
-   if(hours >= 24) {
+   if(hours >= 24) { // 00001100
      hours = 0;
      shutOffLights();
    }
