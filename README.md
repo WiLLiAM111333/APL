@@ -6,5 +6,6 @@
 * [10](./arduino_uppgift_10)
   * [1](./arduino_uppgift_10/assignment_1.ino)
   * [2](./arduino_uppgift_10/assignment_2.ino)
+  * [3](./arduino_uppgift_10/assignment_3.ino)
 
 ---
