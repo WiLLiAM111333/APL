@@ -1,6 +1,6 @@
 int secondPins[] = { 13, 12, 11, 10, 9, 8 };
 int minutePins[] = { 7, 6, 5, 4, 3, 2 };
-int hourPins[] = { A0, A1, A2, A3, A4 };
+int hourPins[] = { A0, A1, A2, A3, A4 }; 
 
 int seconds = 58;
 int minutes = 32;
@@ -29,19 +29,22 @@ void loop() {
     hours++;   
   }
 
+  if(hours >= 24) { // 00001100
+    hours = 0;
+    shutOffLights();
+  }
+
   displaySeconds();
   displayMinutes();
   displayHours();
-
-   if(hours >= 24) { // 00001100
-     hours = 0;
-     shutOffLights();
-   }
 
   Serial.println();
   delay(1000);
 }//endloop
 
+/*
+ * Lyser upp de röda LED lamporna från pinnarna 8 till 13 för att visa sekunderna på klockan
+ */
 void displaySeconds() {
   // Storlek på array
   int arraySize = sizeof(secondPins) / sizeof(secondPins[0]);
@@ -63,6 +66,9 @@ void displaySeconds() {
   }
 }
 
+/**
+ * Lyser upp de gula LED lamporna från pinnarna 2 till 7 för att visa minuterna på klockan
+ */
 void displayMinutes() {
   // Storlek på arrayen minutePins
   int arraySize = sizeof(minutePins) / sizeof(minutePins[0]);
@@ -84,6 +90,9 @@ void displayMinutes() {
   }
 }
 
+/**
+ * Lyser upp de gröna LED lamporna från pinnarna A0 - A4 (Analog 0 till 7) för att visa timmarna på klockan
+ */
 void displayHours() {
   // Storlek på arrayen minutePins
   int arraySize = sizeof(hourPins) / sizeof(hourPins[0]);
@@ -105,10 +114,17 @@ void displayHours() {
   }
 }
 
+/**
+ * Skickar tillbaka om nummret är plural eller singular för att hjälpa med att printa grammatiskt 
+ * korrekt i Serial Monitor med hjälp av Serial klassen 
+ */
 bool isPlural(int num) {
   return num < 1 || num > 1;
 }
 
+/**
+ * Stänger av alla lampor
+ */
 void shutOffLights() {
   // Storlek på array secondPins
   int secondsSize = sizeof(secondPins) / sizeof(secondPins[0]);
@@ -125,12 +141,16 @@ void shutOffLights() {
     digitalWrite(secondPins[i], LOW);
   }
 
+  // Släcker timmlamporna
   for(int i = 0; i < 5; i++) {
     const int pin = hourPins[i];
     digitalWrite(pin, LOW);
   }
 }
 
+/**
+ * Printar ut alla visare på klockan tillsammans med binära talen
+ */
 void printSerialValues(int value, String timePrefix){
   Serial.print(" = ");  
   Serial.print(value);
