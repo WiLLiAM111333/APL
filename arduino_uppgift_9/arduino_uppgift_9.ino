@@ -1,9 +1,10 @@
 int secondPins[] = { 13, 12, 11, 10, 9, 8 };
 int minutePins[] = { 7, 6, 5, 4, 3, 2 };
 int hourPins[] = { A0, A1, A2, A3, A4 };
-int seconds = 0;
-int minutes = 0;
-int hours = 0;
+
+int seconds = 58;
+int minutes = 32;
+int hours = 23;
 
 void setup() {
   Serial.begin(9600);
@@ -30,21 +31,21 @@ void loop() {
 
   displaySeconds();
   displayMinutes();
-  displayHours(); 
-/*
+  displayHours();
 
-  if(hours >= 31) { // 00111111 binary
-    shutOffLights();
-  }
- 
- */ 
+   if(hours >= 24) {
+     hours = 0;
+     shutOffLights();
+   }
+
+  Serial.println();
   delay(1000);
 }//endloop
 
 void displaySeconds() {
   // Storlek på array
   int arraySize = sizeof(secondPins) / sizeof(secondPins[0]);
-  
+
   for(int i = arraySize - 1; i >= 0; i--) {
     // Läser in seconds som en byte och läser en bit på position i
     int currentNumber = bitRead(seconds, i);
@@ -55,13 +56,17 @@ void displaySeconds() {
     Serial.print(currentNumber);
   }
 
-serialValues(seconds, " (Sekunder) ");
+  if(isPlural(seconds)) {
+    printSerialValues(seconds, "Sekunder"); 
+  } else {
+    printSerialValues(seconds, "Sekund");
+  }
 }
 
 void displayMinutes() {
   // Storlek på arrayen minutePins
   int arraySize = sizeof(minutePins) / sizeof(minutePins[0]);
-  
+
   for(int i = arraySize - 1; i >= 0; i--) {
     // Läser in seconds som en byte och läser en bit på position i
     int currentNumber = bitRead(minutes, i);
@@ -72,7 +77,11 @@ void displayMinutes() {
     Serial.print(currentNumber);
   }
 
-serialValues(minutes, " (Minuter) ");
+  if(isPlural(minutes)) {
+    printSerialValues(minutes, "Minuter"); 
+  } else {
+    printSerialValues(minutes, "Minut");
+  }
 }
 
 void displayHours() {
@@ -89,9 +98,15 @@ void displayHours() {
     Serial.print(currentNumber);
   }
 
-serialValues(hours, " (Timmar) ");
-Serial.println();
+  if(isPlural(hours)) {
+    printSerialValues(hours, "Timmar"); 
+  } else {
+    printSerialValues(hours, "Timme");
+  }
+}
 
+bool isPlural(int num) {
+  return num < 1 || num > 1;
 }
 
 void shutOffLights() {
@@ -116,11 +131,10 @@ void shutOffLights() {
   }
 }
 
-void serialValues(int timePrefix, String textPrefix){
-  Serial.print(" = ");
+void printSerialValues(int value, String timePrefix){
+  Serial.print(" = ");  
+  Serial.print(value);
+  Serial.print(" ");
   Serial.print(timePrefix);
-  Serial.print(" ");
-  Serial.print(textPrefix);
-  Serial.print(" ");
   Serial.println();
 }
