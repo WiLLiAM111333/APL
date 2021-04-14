@@ -18,5 +18,6 @@
   * [4](./arduino_uppgift_10/assignment_4.ino)
   * [5](./arduino_uppgift_10/assignment_5.ino)
   * [6](./arduino_uppgift_10/assignment_6.ino)
+  * [7](./arduino_uppgift_10/assignment_7.ino)
 
 ---
