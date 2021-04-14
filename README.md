@@ -1,5 +1,10 @@
 # THG APL 2021 Arduino Arbeten
 
+[Hjälp-länkar](./resources)
+[PDFs](./pdf)
+
+---
+
 ## Uppgifter
 
 * [9](./arduino_uppgift_9/arduino_uppgift_9.ino)
