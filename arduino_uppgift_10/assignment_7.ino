@@ -16,7 +16,6 @@ int wakingTimes[3] = { 16, 0, 30 };
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 
 void setup() {
-  Serial.begin(9600);
   lcd.begin(16, 2);
   lcd.clear();
 }
