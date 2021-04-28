@@ -384,26 +384,27 @@ void playSong() {
     250, 125, 375, 250, 125, 375,
     125, 125, 125, 125, 125, 500
   };
- 
+
+  level = 0;
   const int totalNotes = sizeof(notes) / sizeof(int);
   const int buzzer = A0;
   const float songSpeed = 1.0;
-  
+
   for (int i = 0; i < totalNotes; i++) {
     if(buttonPushed) {
-      break;  
-    }
-    
-    const int currentNote = notes[i];
-    float wait = durations[i] / songSpeed;
-    
-    if(currentNote != 0) {
-      tone(buzzer, notes[i], wait);
+       i = totalNotes;
     } else {
-      noTone(buzzer);
+      const int currentNote = notes[i];
+      float wait = durations[i] / songSpeed;
+        
+      if(currentNote != 0) {
+        tone(buzzer, notes[i], wait);
+      } else {
+        noTone(buzzer);
+      }
+
+      delay(wait);
     }
-    
-    delay(wait);
   }
 }
 
