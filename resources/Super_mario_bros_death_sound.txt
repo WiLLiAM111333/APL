@@ -5,7 +5,7 @@
 #define NOTE_C5 523
 #define NOTE_D5 587
 
-void playSong() {
+void deathSound() {
   int notes[] = {
     NOTE_G4, 0, NOTE_D5, 0, NOTE_D5, 0,
     NOTE_D5, 0, NOTE_C5, 0, NOTE_B4, 0,
