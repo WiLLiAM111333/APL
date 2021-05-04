@@ -5,22 +5,14 @@
 #include <LiquidCrystal.h>
 
 #define NOTE_C4 262
-#define NOTE_D4 294
 #define NOTE_E4 330
-#define NOTE_F4 349
 #define NOTE_G4 392
-#define NOTE_A4 440
 #define NOTE_B4 494
 #define NOTE_C5 523
 #define NOTE_D5 587
-#define NOTE_E5 659
-#define NOTE_F5 698
-#define NOTE_G5 784
-#define NOTE_A5 880
-#define NOTE_B5 988
 
 #define PIN_BUTTON 2
-#define PIN_BUTTON_2 13
+#define PIN_BUTTON_2 3
 #define PIN_CRASH_LED 11
 #define PIN_AUTOPLAY 1
 #define PIN_READWRITE 10
@@ -62,7 +54,7 @@
 
 // Initiera biblioteket med de stift vi använder.
 const int RS = 4;
-const int E  = 3;
+const int E  = 5;
 const int D4 = 7;
 const int D5 = 8;
 const int D6 = 9;
@@ -73,13 +65,85 @@ static char trackUpper[TRACK_WIDTH + 1];
 static char trackLower[TRACK_WIDTH + 1];
 static bool buttonPushed = false;
 static bool button2Pushed = false;
-static bool hasLevelText = false;
 static int level;
+
+String difficulties[3] = { "Easy", "Medium", "Hard" };
 
 enum SpeedLevel {
   ONE = 100,
-  TWO = 50
+  TWO = 75,
+  THREE = 50
 };
+
+void rotateArrayRight(String arr[], int amount) {
+  for(int i = 0; i < amount; i++) {
+    const String temp = arr[i];
+    
+    if(i + 1 == amount) {
+      arr[i] = arr[amount - 1];
+      arr[amount - 1] = temp;
+    } else {
+      arr[i] = arr[i + 1];
+      arr[i + 1] = temp;
+    }
+  }
+}
+
+void rotateArrayLeft(String arr[], int amount) {
+  for(int i = amount - 1; i >= 0; i--) {
+    const String temp = arr[i];
+    
+    if(i == 0) {
+      arr[i] = arr[0];
+      arr[0] = temp;
+    } else {
+      arr[i] = arr[i - 1];
+      arr[i - 1] = temp;
+    }
+  }
+}
+
+void difficultySelection(){
+  int i = 0;
+  bool done = false;
+  
+  while(!done){
+    lcd.setCursor(0, 0);
+    lcd.print('>');
+    lcd.print(difficulties[i]);
+    lcd.setCursor(0, 1);
+    
+    if(i + 1 == 3){
+      i = -1; 
+    }
+      
+    lcd.print(difficulties[i + 1]);
+      
+    //stoppar loopen och ska starta spelet med den valda svårehetsgraden
+    if(buttonPushed){
+      done = true;
+
+      const String selectedLevel = difficulties[0];
+
+      if(selectedLevel == "Easy") {
+        level = SpeedLevel::ONE;
+      } else if(selectedLevel == "Medium") {
+        level = SpeedLevel::TWO;
+      } else {
+        level = SpeedLevel::THREE;
+      }
+      
+      lcd.clear();
+      
+      buttonPushed = false;
+    } else if(button2Pushed){
+      lcd.clear();
+      rotateArrayRight(difficulties, 3);
+      
+      button2Pushed = false;
+    } 
+  }
+}
 
 /****************************************************************
 * Funktionen skapar Nisse
@@ -294,120 +358,46 @@ bool drawNisse(byte position, char* trackUpper, char* trackLower, unsigned int s
 // Funktionen hanterar knapptryckningen som ett avbrott 
 void buttonPush() {
   buttonPushed = true;
+
+  Serial.println("buttonPushed");
 }
 
-void playSong() {
+void button2Push() {
+  button2Pushed = true;
+
+  Serial.println("button2Pushed");
+}
+
+void deathSound() {
   int notes[] = {
-    NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, 0,
-    NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0,
-    NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, 0,
-    NOTE_A4, NOTE_G4, NOTE_A4, 0,
-    NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, 0,
-    NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0,
-    NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, 0,
-    NOTE_A4, NOTE_G4, NOTE_A4, 0,
-    NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, 0,
-    NOTE_A4, NOTE_C5, NOTE_D5, NOTE_D5, 0,
-    NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, 0,
-    NOTE_E5, NOTE_D5, NOTE_E5, NOTE_A4, 0,
-    NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0,
-    NOTE_D5, NOTE_E5, NOTE_A4, 0,
-    NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, 0,
-    NOTE_C5, NOTE_A4, NOTE_B4, 0,
-    NOTE_A4, NOTE_A4,
-    //Repeat of first part
-    NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0,
-    NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, 0,
-    NOTE_A4, NOTE_G4, NOTE_A4, 0,
-    NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, 0,
-    NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0,
-    NOTE_C5, NOTE_D5, NOTE_B4, NOTE_B4, 0,
-    NOTE_A4, NOTE_G4, NOTE_A4, 0,
-    NOTE_E4, NOTE_G4, NOTE_A4, NOTE_A4, 0,
-    NOTE_A4, NOTE_C5, NOTE_D5, NOTE_D5, 0,
-    NOTE_D5, NOTE_E5, NOTE_F5, NOTE_F5, 0,
-    NOTE_E5, NOTE_D5, NOTE_E5, NOTE_A4, 0,
-    NOTE_A4, NOTE_B4, NOTE_C5, NOTE_C5, 0,
-    NOTE_D5, NOTE_E5, NOTE_A4, 0,
-    NOTE_A4, NOTE_C5, NOTE_B4, NOTE_B4, 0,
-    NOTE_C5, NOTE_A4, NOTE_B4, 0,
-    //End of Repeat
-    NOTE_E5, 0, 0, NOTE_F5, 0, 0,
-    NOTE_E5, NOTE_E5, 0, NOTE_G5, 0, NOTE_E5, NOTE_D5, 0, 0,
-    NOTE_D5, 0, 0, NOTE_C5, 0, 0,
-    NOTE_B4, NOTE_C5, 0, NOTE_B4, 0, NOTE_A4,
-    NOTE_E5, 0, 0, NOTE_F5, 0, 0,
-    NOTE_E5, NOTE_E5, 0, NOTE_G5, 0, NOTE_E5, NOTE_D5, 0, 0,
-    NOTE_D5, 0, 0, NOTE_C5, 0, 0,
-    NOTE_B4, NOTE_C5, 0, NOTE_B4, 0, NOTE_A4
+    NOTE_G4, 0, NOTE_D5, 0, NOTE_D5, 0,
+    NOTE_D5, 0, NOTE_C5, 0, NOTE_B4, 0,
+    NOTE_G4, NOTE_E4, 0, NOTE_E4, NOTE_C4,  
   };
   
   int durations[] = {
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 375, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 375, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 125, 250, 125,
-    125, 125, 250, 125, 125,
-    250, 125, 250, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 375, 375,
-    250, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 375, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 375, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 125, 250, 125,
-    125, 125, 250, 125, 125,
-    250, 125, 250, 125,
-    125, 125, 250, 125, 125,
-    125, 125, 375, 375,
-    250, 125, 375, 250, 125, 375,
-    125, 125, 125, 125, 125, 125, 125, 125, 375,
-    250, 125, 375, 250, 125, 375,
-    125, 125, 125, 125, 125, 500,
-    250, 125, 375, 250, 125, 375,
-    125, 125, 125, 125, 125, 125, 125, 125, 375,
-    250, 125, 375, 250, 125, 375,
-    125, 125, 125, 125, 125, 500
+    80, 60, 100, 250, 60, 60,
+    60, 60, 60, 80, 80, 60,
+    120, 150, 250, 100, 120
   };
-
-  level = 0;
+  
   const int totalNotes = sizeof(notes) / sizeof(int);
   const int buzzer = A0;
   const float songSpeed = 1.0;
-
+  
   for (int i = 0; i < totalNotes; i++) {
-    if(buttonPushed) {
-       i = totalNotes;
+    const int currentNote = notes[i];
+    float wait = durations[i] / songSpeed;
+    
+    if (currentNote != 0) {
+      tone(buzzer, notes[i], wait);
     } else {
-      const int currentNote = notes[i];
-      float wait = durations[i] / songSpeed;
-        
-      if(currentNote != 0) {
-        tone(buzzer, notes[i], wait);
-      } else {
-        noTone(buzzer);
-      }
-
-      delay(wait);
+      noTone(buzzer);
     }
+    
+    delay(wait);
   }
 }
-
 
 void setup() {
   Serial.begin(9600);
@@ -425,12 +415,16 @@ void setup() {
   digitalWrite(PIN_BUTTON, HIGH);
 
   pinMode(PIN_BUTTON_2, INPUT);
+  digitalWrite(PIN_BUTTON_2, HIGH);
   
   pinMode(PIN_AUTOPLAY, OUTPUT);
   digitalWrite(PIN_AUTOPLAY, HIGH);
   
-  // Digital stift 2 mappas för att avbryta 0 /*PIN_BUTTON*/
+  // Digital stift 2 mappas för att avbryta 0 PIN_BUTTON 
   attachInterrupt(0, buttonPush, FALLING);
+  
+  // Digital stift 3 mappas flr att avbryta 1 PIN_BUTTON_2
+  attachInterrupt(1, button2Push, FALLING);
   
   createGraphicNisse();
   
@@ -438,41 +432,26 @@ void setup() {
 }
 
 void loop() {
+  // Refreshar lcd cursor till position 0, 0 för att se till att menyn alltid printar ut från rad 1 till 2 om man dör
+  lcd.setCursor(0, 0);
+  
   while(!level) {
-    if(!hasLevelText) {
-      lcd.print("1. Easy");
-      lcd.setCursor(0, 1);
-
-      lcd.print("2. Hard");
-      lcd.setCursor(0, 0); 
-
-      hasLevelText = true;
-    }
-
-    if(buttonPushed) {
-      level = SpeedLevel::ONE;
-    } else if(button2Pushed) {
-      level = SpeedLevel::TWO;
-    }
+    difficultySelection();
   }
 
   lcd.clear();
   
   static byte nissePos  = NISSE_POSITION_RUN_LOWER_1;
-  static byte newTrackType  = TRACK_EMPTY;
+  static byte newTrackType = TRACK_EMPTY;
   static byte newTrackDuration = 1;
   static bool playing = false;
   static bool blink   = false;
   static unsigned int distance = 0;
-
-   if(digitalRead(PIN_BUTTON_2)) {
-     button2Pushed = true;
-   }
   
   if (!playing) {     
     drawNisse((blink) ? NISSE_POSITION_OFF : nissePos, trackUpper, trackLower, distance >> 3);
 
-    if (blink) {
+    if(blink) {
       lcd.setCursor(0,0);
       lcd.clear();
       lcd.print("*GAME NISSE*");
@@ -522,12 +501,15 @@ void loop() {
     lcd.print("...CRASH...!");
 
     digitalWrite(PIN_CRASH_LED, HIGH);
-    playSong();
+    deathSound();
+
+    level = 0;
     
     delay(2000); 
     
     lcd.clear();
     digitalWrite(PIN_CRASH_LED, LOW);
+    buttonPushed = false;
     
     createGraphicNisse();
     nissePos = NISSE_POSITION_RUN_LOWER_1;
