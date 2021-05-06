@@ -34,3 +34,7 @@ Vi sparade tyvärr inte all kod från början, men vi sparade allt vi har gjort 
 
 * [Instruktioner/pdfer/kod till alla projekt](./instructions)
 * [Resurser använda för att komma fram till lösningar på problem](./resources)
+
+---
+
+[LCD Scroll Med Array Rotation](./lcdRotateArrayScroll.md)
