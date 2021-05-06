@@ -2,7 +2,9 @@
 
 Grupp: William och Herman
 
-Vi sparade tyvärr inte all kod från början, men vi sparade allt vi har gjort sedan dess här. Vi skippade projekt 11, 12 och 15 och gjorde en extra-uppgift istället:
+Vi sparade tyvärr inte all kod från början, men vi sparade allt vi har gjort sedan dess här. 
+
+Vi skippade projekt 4, 11, 12 och 15 och gjorde en extra-uppgift istället:
 * [bild](./images/extra-uppgift.png)
 * [kod](./arduino_extrauppgift_2021-04-22.ino)
 
