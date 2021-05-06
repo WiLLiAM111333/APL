@@ -1,8 +1,8 @@
 # APL 2021
 
-Vi sparade tyvärr inte all kod från början, men vi sparade allt vi har gjort sedan dess här.
+Grupp: William och Herman
 
-Vi skippade projekt 11, 12 och 15 och gjorde en extra-uppgift istället:
+Vi sparade tyvärr inte all kod från början, men vi sparade allt vi har gjort sedan dess här. Vi skippade projekt 11, 12 och 15 och gjorde en extra-uppgift istället:
 * [bild](./images/extra-uppgift.png)
 * [kod](./arduino_extrauppgift_2021-04-22.ino)
 
@@ -27,6 +27,8 @@ Vi skippade projekt 11, 12 och 15 och gjorde en extra-uppgift istället:
 * [Projekt 17](./arduino_uppgift_17/arduino_uppgift_17.ino)
   - [Bilder](./images/uppgift_17)
 * [Projekt 18](./arduino_uppgift_18/assignment_1.ino)
+
+---
 
 ## Källor
 
