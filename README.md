@@ -10,7 +10,7 @@ Vi sparade tyvärr inte all kod från början, men vi sparade allt vi har gjort 
 
 ## Projekt
 
-* [Projekt 9](./arduino_uppgift_9/arduino_uppgift_9)
+* [Projekt 9](./arduino_uppgift_9/arduino_uppgift_9.ino)
 * [Projekt 10](./arduino_uppgift_10)
   - [Uppgift 1](./arduino_uppgift_10/assignment_1.ino)
   - [Uppgift 2](./arduino_uppgift_10/assignment_2.ino)
